@@ -140,9 +140,7 @@ int main() {
     cout << "Areas after sort: " << endl;
     printAreas(shapes);
 
-
-
-	return 0;
+    return 0;
 }
 ```
 
