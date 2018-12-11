@@ -17,13 +17,13 @@ class Rectangle : public Shape
 {
 public:
     Rectangle(double x, double y) : x_(x), y_(y) {}
-    Rectangle(const Rectangle & other) { x_ = other.getX(); y_ = other.getY(); }
+    Rectangle(const Rectangle & other) = default;
 
-    double getArea() const { return x_ * y_; }
-    double getPerimeter() const { return 2 * (x_ + y_); }
-    double getX() const { return x_; }
+    double getArea() const override { return x_ * y_; }
+    double getPerimeter() const override { return 2 * (x_ + y_); }
+    virtual double getX() const final { return x_; }
     double getY() const { return y_; }
-    void print() const {
+    void print() const override {
     	cout << "Rectangle: x: " << getX() << endl
              << "           y: " << getY() << endl
              << "        area: " << getArea() << endl
@@ -31,54 +31,54 @@ public:
 	}
 
 private:
-    Rectangle();
+    Rectangle() = delete;
 
     double x_;
     double y_;
 };
 
-class Square : public Rectangle
+class Square final : public Rectangle
 {
 public:
     Square(double x) : Rectangle(x, x) {}
-    Square(const Square & other) : Rectangle(other.getX(), other.getX()) {}
+    Square(const Square & other) = default;
 
-    double getArea() { return getX() * getX(); }
-    double getPerimeter() { return 4 * getX(); }
-    void print() {
+    double getArea() const override { return getX() * getX(); }
+    double getPerimeter() const override { return 4 * getX(); }
+    void print() const override {
     	cout << "Square:    x: " << getX() << endl
              << "        area: " << getArea() << endl
              << "   perimeter: " << getPerimeter() << endl;
 	}
 
 private:
-    double getY(); // should not have Y dimension
-    Square();
+    double getY() = delete;
+    Square() = delete;
 };
 
-bool sortByArea(Shape* first, Shape* second)
+auto sortByArea(Shape* first, Shape* second)
 {
-    if(first == NULL || second == NULL)
+    if(first == nullptr || second == nullptr)
     {
         return false;
     }
     return (first->getArea() < second->getArea());
 }
 
-typedef vector<Shape*> Collection;
+using Collection = vector<Shape*>;
 
-void printCollectionElements(const Collection& collection)
+auto printCollectionElements(const Collection& collection)
 {
-    for(Collection::const_iterator it = collection.begin(); it != collection.end(); ++it)
-        if(*it != NULL)
-            (*it)->print();
+    for(const auto & it : collection)
+        if(it != nullptr)
+            it->print();
 }
 
-void printAreas(const Collection& collection)
+auto printAreas(const Collection& collection)
 {
-    for(Collection::const_iterator it = collection.begin(); it != collection.end(); ++it)
-        if(*it != NULL)
-            cout << (*it)->getArea() << endl;
+    for(const auto & it : collection)
+        if(it != nullptr)
+            cout << it->getArea() << endl;
 }
 
 int main() {
