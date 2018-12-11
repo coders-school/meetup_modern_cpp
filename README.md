@@ -3,6 +3,8 @@
 
 [![Build Status](https://travis-ci.org/coders-school/meetup_modern_cpp.svg?branch=solutions)](https://travis-ci.org/coders-school/meetup_modern_cpp)
 
+[Wersja online w serwisie Tech.io](https://tech.io/playgrounds/37891/meetup-nowoczesny-c)
+
 Poniżej jest kod napisany w starym C++03. Reprezentuje on prostą hierarchię figur geometrycznych. Klasa bazowa `Shape` definiuje interfejs z 3 publicznymi metodami: `getArea()`, `getPerimeter()` i `print()`. Po `Shape` dziedziczy klasa `Rectangle` reprezentująca prostokąt, a po niej dziedziczy klasa `Square` reprezentująca kwadrat. Klasy te odpowienio implementują wspomniane metody. W funkcji `main()` jest użycie figur, które są przechowywane w kolekcji. Twoim zadaniem jest unowocześnienie tego kodu, korzystając z możliwości jakie daje C++11 i C++14.
 
 Jeśli ściągniesz kod lokalnie, to dodatkowo możesz sprawdzać postęp za pomocą dodanych skryptów sprawdzających. [Repozytorium do ściągnięcia na GitHubie](https://github.com/coders-school/meetup_modern_cpp)
@@ -39,10 +41,13 @@ Potrzebne programy: make, g++
 1. lambda functions:
     Zamień funkcję `sortByArea()` na funkcję lambda
 
-```C++ runnable
+## Rozwiązane zadanie
+
+```
 #include <iostream>
 #include <vector>
 #include <algorithm>
+#include <memory>
 using namespace std;
 
 class Shape
@@ -59,13 +64,13 @@ class Rectangle : public Shape
 {
 public:
     Rectangle(double x, double y) : x_(x), y_(y) {}
-    Rectangle(const Rectangle & other) { x_ = other.getX(); y_ = other.getY(); }
+    Rectangle(const Rectangle & other) = default;
 
-    double getArea() const { return x_ * y_; }
-    double getPerimeter() const { return 2 * (x_ + y_); }
-    double getX() const { return x_; }
+    double getArea() const override { return x_ * y_; }
+    double getPerimeter() const override { return 2 * (x_ + y_); }
+    virtual double getX() const final { return x_; }
     double getY() const { return y_; }
-    void print() const {
+    void print() const override {
     	cout << "Rectangle: x: " << getX() << endl
              << "           y: " << getY() << endl
              << "        area: " << getArea() << endl
@@ -73,71 +78,70 @@ public:
 	}
 
 private:
-    Rectangle();
+    Rectangle() = delete;
 
     double x_;
     double y_;
 };
 
-class Square : public Rectangle
+class Square final : public Rectangle
 {
 public:
     Square(double x) : Rectangle(x, x) {}
-    Square(const Square & other) : Rectangle(other.getX(), other.getX()) {}
+    Square(const Square & other) = default;
 
-    double getArea() { return getX() * getX(); }
-    double getPerimeter() { return 4 * getX(); }
-    void print() {
+    double getArea() const override { return getX() * getX(); }
+    double getPerimeter() const override { return 4 * getX(); }
+    void print() const override {
     	cout << "Square:    x: " << getX() << endl
              << "        area: " << getArea() << endl
              << "   perimeter: " << getPerimeter() << endl;
 	}
 
 private:
-    double getY(); // should not have Y dimension
-    Square();
+    double getY() = delete;
+    Square() = delete;
 };
 
-bool sortByArea(Shape* first, Shape* second)
+using Collection = vector<shared_ptr<Shape>>;
+
+auto printCollectionElements(const Collection& collection)
 {
-    if(first == NULL || second == NULL)
-    {
-        return false;
-    }
-    return (first->getArea() < second->getArea());
+    for(const auto & it : collection)
+        if(it != nullptr)
+            it->print();
 }
 
-typedef vector<Shape*> Collection;
-
-void printCollectionElements(const Collection& collection)
+auto printAreas(const Collection& collection)
 {
-    for(Collection::const_iterator it = collection.begin(); it != collection.end(); ++it)
-        if(*it != NULL)
-            (*it)->print();
-}
-
-void printAreas(const Collection& collection)
-{
-    for(Collection::const_iterator it = collection.begin(); it != collection.end(); ++it)
-        if(*it != NULL)
-            cout << (*it)->getArea() << endl;
+    for(const auto & it : collection)
+        if(it != nullptr)
+            cout << it->getArea() << endl;
 }
 
 int main() {
-	Collection shapes;
-    shapes.push_back(new Rectangle(4.0, 2.0));
-    shapes.push_back(new Rectangle(10.0, 5.0));
-    shapes.push_back(new Square(3.0));
-    shapes.push_back(new Square(4.0));
-    
+	Collection shapes = {
+        make_shared<Rectangle>(4.0, 2.0),
+        make_shared<Rectangle>(10.0, 5.0),
+        make_shared<Square>(3.0),
+        make_shared<Square>(4.0)
+    };
+
     printCollectionElements(shapes);
-    
+
     cout << "Areas before sort: " << endl;
     printAreas(shapes);
-    sort(shapes.begin(), shapes.end(), sortByArea);
+    sort(shapes.begin(), shapes.end(), [](shared_ptr<Shape> first, shared_ptr<Shape> second)
+    {
+        if(first == nullptr || second == nullptr)
+            return false;
+        return (first->getArea() < second->getArea());
+    });
     cout << "Areas after sort: " << endl;
     printAreas(shapes);
-    
+
+
+
 	return 0;
 }
 ```
