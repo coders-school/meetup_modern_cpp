@@ -43,7 +43,7 @@ Potrzebne programy: make, g++
 
 ## Rozwiązane zadanie
 
-```
+```C++ runnable
 #include <iostream>
 #include <vector>
 #include <algorithm>
