@@ -1,6 +1,7 @@
 #include <iostream>
 #include <vector>
 #include <algorithm>
+#include <memory>
 using namespace std;
 
 class Shape
@@ -56,16 +57,7 @@ private:
     Square() = delete;
 };
 
-auto sortByArea(Shape* first, Shape* second)
-{
-    if(first == nullptr || second == nullptr)
-    {
-        return false;
-    }
-    return (first->getArea() < second->getArea());
-}
-
-using Collection = vector<Shape*>;
+using Collection = vector<shared_ptr<Shape>>;
 
 auto printCollectionElements(const Collection& collection)
 {
@@ -82,19 +74,27 @@ auto printAreas(const Collection& collection)
 }
 
 int main() {
-	Collection shapes;
-    shapes.push_back(new Rectangle(4.0, 2.0));
-    shapes.push_back(new Rectangle(10.0, 5.0));
-    shapes.push_back(new Square(3.0));
-    shapes.push_back(new Square(4.0));
+	Collection shapes = {
+        make_shared<Rectangle>(4.0, 2.0),
+        make_shared<Rectangle>(10.0, 5.0),
+        make_shared<Square>(3.0),
+        make_shared<Square>(4.0)
+    };
     
     printCollectionElements(shapes);
-    
+  
     cout << "Areas before sort: " << endl;
     printAreas(shapes);
-    sort(shapes.begin(), shapes.end(), sortByArea);
+    sort(shapes.begin(), shapes.end(), [](shared_ptr<Shape> first, shared_ptr<Shape> second)
+    {
+        if(first == nullptr || second == nullptr)
+            return false;
+        return (first->getArea() < second->getArea());
+    });
     cout << "Areas after sort: " << endl;
     printAreas(shapes);
-    
+
+
+
 	return 0;
 }
