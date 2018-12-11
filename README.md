@@ -1,10 +1,20 @@
 # Meetup Nowoczesny C++ - Welcome!
-
 ![Coders School](http://coders.school/wp-content/uploads/2018/10/LOGO_bez_tla.png)
 
-Poniżej jest kod napisany w starym C++03. Reprezentuje on prostą hierarchię figur geometrycznych. Klasa bazowa `Shape` definiuje interfejs z 3 publicznymi metodami: `getArea()`, `getPerimeter()` i `print()`. Po `Shape` dziedziczy klasa `Rectangle` reprezentująca prostokąt, a po niej dziedziczy klasa `Square` reprezentująca kwadrat. Klasy te odpowienio implementują wspomniane metody. W funkcji `main()` jest użycie figur, któe są przechowywane w kolekcji. Twoim zadaniem jest unowocześnienie tego kodu, korzystając z możliwości jakie daje C++11 i C++14.
+[![Build Status](https://travis-ci.org/coders-school/meetup_modern_cpp.svg?branch=master)](https://travis-ci.org/coders-school/meetup_modern_cpp)
 
-Zadania:
+[Wersja online w serwisie Tech.io](https://tech.io/playgrounds/37891/meetup-nowoczesny-c)
+
+Poniżej jest kod napisany w starym C++03. Reprezentuje on prostą hierarchię figur geometrycznych. Klasa bazowa `Shape` definiuje interfejs z 3 publicznymi metodami: `getArea()`, `getPerimeter()` i `print()`. Po `Shape` dziedziczy klasa `Rectangle` reprezentująca prostokąt, a po niej dziedziczy klasa `Square` reprezentująca kwadrat. Klasy te odpowienio implementują wspomniane metody. W funkcji `main()` jest użycie figur, które są przechowywane w kolekcji. Twoim zadaniem jest unowocześnienie tego kodu, korzystając z możliwości jakie daje C++11 i C++14.
+
+Jeśli ściągniesz kod lokalnie, to dodatkowo możesz sprawdzać postęp za pomocą dodanych skryptów sprawdzających. [Repozytorium do ściągnięcia na GitHubie](https://github.com/coders-school/meetup_modern_cpp)
+
+Potrzebne programy: make, g++
+
+### Użycie:
+> make
+
+## Zadania:
 1. `nullptr`:
     Zamień wszystkie NULLe na `nullptr`
 1. `using` alias:
@@ -22,8 +32,8 @@ Zadania:
     Oznacz klasę `Square` jako `final` oraz oznacz metodę `getX()` w klasie `Rectangle` jako `final`
 1. `override`:
     Oznacz wszystkie wirtualne metody jako `override`. Czy zauważasz jakiś problem?
-    
-Zadania dodatkowe:
+
+## Zadania dodatkowe:
 1. uniform initialization:
     Użyj jednolitej inicjalizacji do zainicjalizowania kolekcji `shapes`.
 1. smart pointers:
@@ -134,8 +144,9 @@ int main() {
 }
 ```
 
-# Co dalej?
+## Co dalej?
 
+1. Porównaj swoje rozwiązania z naszymi na [GitHubie](https://github.com/coders-school/meetup_modern_cpp/tree/solutions)
 1. Polub [Coders School na Facebooku](https://www.facebook.com/szkola.coders.school)
 1. Zapisz się na [newsletter](http://coders.school/?elementor_library=formularz-mailingowy), aby pobrać dzisiejszą prezentację oraz otrzymywać informacje o przyszłych wydarzeniach i kursach (możesz się wypisać w dowolnej chwili)
 1. Dołącz do [Meetupa Kurs programowania C++](https://www.meetup.com/pl-PL/Kurs-programowania-C/)
